@@ -17,7 +17,8 @@ ufo = Ufo.new(screen)
 
 en1 = Enemy.new(screen, 30,  ufo)
 en1.speed = 0.3
-
+en2 = Enemy.new(screen, 140, ufo)
+en2.speed = 0.5
 
 ufo_hp = SCREEN_W - 100
 you_hp = SCREEN_W - 100
@@ -35,25 +36,69 @@ loop do
   end
 
   # 大砲を動かす
+  SDL::Key.scan
+  if SDL::Key.press?(SDL::Key::LEFT)
+    gun.x -= 2
+  end
+  if SDL::Key.press?(SDL::Key::RIGHT)
+    gun.x += 2
+  end
 
+  if gun.x < 0
+    gun.x = 0
+  end
+  if gun.x >= SCREEN_W - 100
+    gun.x = SCREEN_W - 100
+  end
 
   # エイリアンを落とす
+  if en1.y > BOTTOM - en1.h
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en1.reset(30)
+    en1.speed = 0.3
+  end
+  en1.y += en1.speed
 
+  # エイリアン２を落とす
+  if en2.y > BOTTOM - en2.h
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en2.reset(140)
+    en2.speed = 0.5
+  end
+  en2.y += en2.speed
 
   # エイリアンが大砲に当たったか
+  if en1.hit(gun, 30)
+    you_hp -= 40
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en1.reset(30)
+    en1.speed = 0.3
+  end
+  break if you_hp <= 0
 
+  # エイリアン２が大砲に当たったか
+  if en2.hit(gun, 30)
+    you_hp -= 80
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en2.reset(140)
+    en2.speed = 0.5
+  end
+  break if you_hp <= 0
 
   # ゲームウィンドウを表示する
   screen.fill_rect(0, 0,      SCREEN_W, BOTTOM,          [46, 41, 48])
   screen.fill_rect(0, BOTTOM, SCREEN_W, SCREEN_H-BOTTOM, [0,  0,  0 ])
 
   # ＨＰを表示する
+  screen.fill_rect(10, BOTTOM + 40, you_hp, 20, [255, 255, 0])
+  font.draw_solid_utf8(screen, "#{you_hp}", SCREEN_W - 80, BOTTOM + 40, 255, 255, 255)
 
 
   # キャラクターを表示する
   gun.put
   ufo.put
   en1.put
+  en2.put
 
   screen.update_rect(0, 0, 0, 0)
 end
