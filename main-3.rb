@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'sdl'
-require 'image'
+require './image'
 
 SCREEN_W = 640
 SCREEN_H = 480
@@ -51,16 +51,29 @@ loop do
   end
 
   # エイリアンを落とす
-
+  if en1.y > BOTTOM - en1.h
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en1.reset(30)
+    en1.speed = 0.3
+  end
+  en1.y += en1.speed
 
   # エイリアンが大砲に当たったか
-
+  if en1.hit(gun, 30)
+    you_hp -= 40
+    ufo.x = rand(SCREEN_W - ufo.w)
+    en1.reset(30)
+    en1.speed = 0.3
+  end
+  break if you_hp <= 0
 
   # ゲームウィンドウを表示する
   screen.fill_rect(0, 0,      SCREEN_W, BOTTOM,          [46, 41, 48])
   screen.fill_rect(0, BOTTOM, SCREEN_W, SCREEN_H-BOTTOM, [0,  0,  0 ])
 
   # ＨＰを表示する
+  screen.fill_rect(10, BOTTOM + 40, you_hp, 20, [255, 255, 0])
+  font.draw_solid_utf8(screen, "#{you_hp}", SCREEN_W - 80, BOTTOM + 40, 255, 255, 255)
 
 
   # キャラクターを表示する

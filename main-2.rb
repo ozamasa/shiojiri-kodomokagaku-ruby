@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'sdl'
-require 'image'
+require './image'
 
 SCREEN_W = 640
 SCREEN_H = 480
@@ -11,14 +11,13 @@ SDL.init(SDL::INIT_EVERYTHING)
 SDL::TTF.init
 screen = SDL.set_video_mode(SCREEN_W, SCREEN_H, 16, SDL::SWSURFACE)
 
-bom = Bom.new(screen)
+
 gun = Gun.new(screen)
 ufo = Ufo.new(screen)
 
 en1 = Enemy.new(screen, 30,  ufo)
 en1.speed = 0.3
-en2 = Enemy.new(screen, 140, ufo)
-en2.speed = 0.5
+
 
 ufo_hp = SCREEN_W - 100
 you_hp = SCREEN_W - 100
@@ -51,18 +50,6 @@ loop do
     gun.x = SCREEN_W - 100
   end
 
-
-  # ミサイルを発射させる
-  if SDL::Key.press?(SDL::Key::SPACE)
-    bom.launch(gun)
-    bom.speed = 0.5
-  end
-
-  if bom.y > 0
-    bom.y -= bom.speed
-  end
-
-
   # エイリアンを落とす
   if en1.y > BOTTOM - en1.h
     ufo.x = rand(SCREEN_W - ufo.w)
@@ -71,39 +58,7 @@ loop do
   end
   en1.y += en1.speed
 
-  # エイリアン２を落とす
-  if en2.y > BOTTOM - en2.h
-    ufo.x = rand(SCREEN_W - ufo.w)
-    en2.reset(140)
-    en2.speed = 0.5
-  end
-  en2.y += en2.speed
-
-
-  # ＵＦＯがミサイルに当たったか
-  if ufo.hit(bom, 80)
-    ufo_hp -= 30
-    bom.y = -50
-  end
-  break if ufo_hp <= 0
-
   # エイリアンが大砲に当たったか
-  if en1.hit(gun, 30)
-    you_hp -= 40
-    ufo.x = rand(SCREEN_W - ufo.w)
-    en1.reset(30)
-    en1.speed = 0.3
-  end
-  break if you_hp <= 0
-
-  # エイリアン２が大砲に当たったか
-  if en2.hit(gun, 30)
-    you_hp -= 80
-    ufo.x = rand(SCREEN_W - ufo.w)
-    en2.reset(140)
-    en2.speed = 0.5
-  end
-  break if you_hp <= 0
 
 
   # ゲームウィンドウを表示する
@@ -111,17 +66,12 @@ loop do
   screen.fill_rect(0, BOTTOM, SCREEN_W, SCREEN_H-BOTTOM, [0,  0,  0 ])
 
   # ＨＰを表示する
-  screen.fill_rect(10, BOTTOM + 40, you_hp, 20, [255, 255, 0])
-  font.draw_solid_utf8(screen, "#{you_hp}", SCREEN_W - 80, BOTTOM + 40, 255, 255, 255)
-  screen.fill_rect(10, BOTTOM + 10, ufo_hp, 20, [255, 0, 0])
-  font.draw_solid_utf8(screen, "#{ufo_hp}", SCREEN_W - 80, BOTTOM + 10, 255, 255, 255)
+
 
   # キャラクターを表示する
-  bom.put if bom.y > 0
   gun.put
   ufo.put
   en1.put
-  en2.put
 
   screen.update_rect(0, 0, 0, 0)
 end

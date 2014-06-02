@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'sdl'
-require 'image'
+require './image'
 
 SCREEN_W = 640
 SCREEN_H = 480
@@ -51,12 +51,7 @@ loop do
   end
 
   # エイリアンを落とす
-  if en1.y > BOTTOM - en1.h
-    ufo.x = rand(SCREEN_W - ufo.w)
-    en1.reset(30)
-    en1.speed = 0.3
-  end
-  en1.y += en1.speed
+
 
   # エイリアンが大砲に当たったか
 
