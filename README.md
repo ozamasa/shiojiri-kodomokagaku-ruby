@@ -18,6 +18,11 @@ install it yourself as:
 
     $ ruby main.rb
 
+## Screen Shot
+
+![alien.png](alien.png "alien")
+
+
 ## Contributing
 
 1. Fork it
