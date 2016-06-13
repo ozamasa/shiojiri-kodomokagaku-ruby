@@ -1,6 +1,6 @@
-# Shiojiri Kodomokagaku Ruby
+# Shiolab Education *ALIEN*
 
-This is a program source of Ruby to use in 'Shiojiri Kodomokagaku Tankendan'.
+This is a modification of the program source of Ruby, which is used in the 'Shiojiri Kodomokagaku Tankendan of 2013'.
 
 I processed 'Materials of Ruby School for Matsue Jounior High School'(https://github.com/smalruby/ruby-school-mjh) the second.
 
@@ -13,6 +13,8 @@ install it yourself as:
     $ sudo gem install rubysdl
 
 ## Usage
+
+    $ cd app
 
     $ ruby main.rb
 
